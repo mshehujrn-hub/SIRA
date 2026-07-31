@@ -1,0 +1,16 @@
+incident_id,report_text,location,reported_by
+1,"Pressure leak detected on Pipeline 7.",Pipeline 7,John
+2,"Worker slipped near drilling platform.",Platform A,Aisha
+3,"Gas detector triggered alarm.",Plant B,Michael
+4,"Small oil spill observed near storage tank.",Tank Farm,David
+5,"Emergency shutdown initiated after abnormal vibration.",Refinery,Grace
+6,,Pipeline 8,John
+7,"   Pressure leak detected on Pipeline 7.   ",Pipeline 7,John
+8,"gas detector triggered alarm.",Plant B,Michael
+9,"Gas detector triggred alarm.",Plant B,Michael
+10,"Worker slipped near drilling platform.",Platform A,Aisha
+11,"",Tank Farm,David
+12,"PRESSURE LEAK DETECTED ON PIPELINE 7.",Pipeline 7,John
+13,"Pressure leak detected on Pipeline 7.",Pipeline 7,John
+14,"Worker slipped near drilling platform.",Platform A,
+15,"Emergency shutdown initiated after abnormal vibration.",Refinery,Grace

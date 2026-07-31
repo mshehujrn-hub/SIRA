@@ -1,0 +1,12 @@
+[project]
+name = "sira"
+version = "0.1.0"
+description = "An ai-powered platform for analyzing, classifying, and managing incident reports in oil and gas industry"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "ipykernel>=7.3.0",
+    "matplotlib>=3.11.1",
+    "numpy>=2.5.1",
+    "pandas>=3.0.5",
+]
