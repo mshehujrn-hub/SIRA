@@ -247,7 +247,6 @@
 # if __name__ == "__main__":
 #     main()
 
-
 from pathlib import Path
 from src.data_loader import DataLoader
 from src.preprocessing import IncidentDataCleaner
@@ -275,23 +274,37 @@ def main():
     print("[2/4] Executing preprocessing pipeline...")
     cleaner = IncidentDataCleaner(raw_df)
 
-    # Columns targeted for specific cleaning operations
-    text_cols = [
-        "facility",
-        "incident_type",
+    # Columns targeted based on your actual incident dataset schema
+    target_text_cols = [
+        "report_text",
+        "location",
+        "reported_by",
+        "department",
         "severity",
-        "root_cause",
+        "incident_type",
+        "shift",
         "status",
+        "root_cause",
+        "facility",
     ]
-    date_cols = ["incident_date", "report_date"]
-    numeric_cols = ["downtime_hours", "estimated_cost_usd"]
+    target_date_cols = ["report_date", "incident_date"]
+    target_numeric_cols = ["downtime_hours", "estimated_cost_usd"]
+
+    # Dynamically select only existing columns to prevent KeyErrors
+    text_cols = [c for c in target_text_cols if c in raw_df.columns]
+    date_cols = [c for c in target_date_cols if c in raw_df.columns]
+    numeric_cols = [c for c in target_numeric_cols if c in raw_df.columns]
 
     cleaned_df = (
         cleaner.remove_duplicates()
-        .clean_text_sentinels(extra_sentinels=["na", "?", "n/a"])  # Catches disguised string NaNs first
+        .clean_text_sentinels(
+            extra_sentinels=["na", "?", "n/a", "none", "null", ""]
+        )  # Standardizes string NaNs and empty values
         .standardize_text_fields(text_cols)
         .fix_date_formats(date_cols)
-        .handle_numeric_anomalies(numeric_cols, sentinel_values=[-999, -9999, -1])  # Masks numeric error codes
+        .handle_numeric_anomalies(
+            numeric_cols, sentinel_values=[-999, -9999, -1]
+        )  # Masks invalid numeric flags
         .handle_missing_values(
             categorical_cols=text_cols, numeric_cols=numeric_cols
         )
@@ -300,7 +313,7 @@ def main():
 
     # 3. Output Quality Metrics
     dropped_rows = len(raw_df) - len(cleaned_df)
-    print(f"[3/4] Data processing complete.")
+    print("[3/4] Data processing complete.")
     print(f"      - Initial Rows: {len(raw_df)}")
     print(f"      - Rows Retained: {len(cleaned_df)}")
     print(f"      - Duplicates Removed: {dropped_rows}")
