@@ -299,12 +299,17 @@ def main():
         cleaner.remove_duplicates()
         .clean_text_sentinels(
             extra_sentinels=["na", "?", "n/a", "none", "null", ""]
-        )  # Standardizes string NaNs and empty values
-        .standardize_text_fields(text_cols)
+        )
+        .clean_free_text(
+            text_cols=["report_text"]
+        )  # Fixes typos and applies sentence case to descriptions
+        .standardize_text_fields(
+            text_cols
+        )  # Applies Title Case to categorical fields
         .fix_date_formats(date_cols)
         .handle_numeric_anomalies(
             numeric_cols, sentinel_values=[-999, -9999, -1]
-        )  # Masks invalid numeric flags
+        )
         .handle_missing_values(
             categorical_cols=text_cols, numeric_cols=numeric_cols
         )
@@ -316,7 +321,7 @@ def main():
     print("[3/4] Data processing complete.")
     print(f"      - Initial Rows: {len(raw_df)}")
     print(f"      - Rows Retained: {len(cleaned_df)}")
-    print(f"      - Duplicates Removed: {dropped_rows}")
+    print(f"      - Records Removed/Filtered: {dropped_rows}")
 
     # 4. Save Cleaned Dataset
     output_data_path.parent.mkdir(parents=True, exist_ok=True)
